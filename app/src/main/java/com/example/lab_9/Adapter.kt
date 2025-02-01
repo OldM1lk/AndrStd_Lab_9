@@ -22,7 +22,7 @@ class Adapter(diffCallback: DiffCallback) : ListAdapter<WeatherEntry, RecyclerVi
         fun bind(weatherEntry: WeatherEntry) {
             itemView.findViewById<TextView>(R.id.date).text = weatherEntry.dt_txt
             val tempCel = weatherEntry.main.temp - 273.15
-            itemView.findViewById<TextView>(R.id.temp).text = String.format("%.2f °C", tempCel)
+            itemView.findViewById<TextView>(R.id.temp).text = String.format("%.0f °C", tempCel)
             val iconUrl = "https://openweathermap.org/img/wn/${weatherEntry.weather[0].icon}@2x.png"
             Glide.with(itemView.context)
                 .load(iconUrl)
@@ -34,7 +34,7 @@ class Adapter(diffCallback: DiffCallback) : ListAdapter<WeatherEntry, RecyclerVi
         fun bind(weatherEntry: WeatherEntry) {
             itemView.findViewById<TextView>(R.id.date).text = weatherEntry.dt_txt
             val tempCel = weatherEntry.main.temp - 273.15
-            itemView.findViewById<TextView>(R.id.temp).text = String.format("%.2f °C", tempCel)
+            itemView.findViewById<TextView>(R.id.temp).text = String.format("%.0f °C", tempCel)
             val iconUrl = "https://openweathermap.org/img/wn/${weatherEntry.weather[0].icon}@2x.png"
             Glide.with(itemView.context)
                 .load(iconUrl)
