@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adapter: Adapter
-    private var data: List<WeatherEntry>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         rView.adapter = adapter
         rView.layoutManager = LinearLayoutManager(this)
 
-        if (savedInstanceState == null) {
+        if (WeatherStore.weathers == null) {
             val mService: RetrofitServices = Common.retrofitService
             val lat = 54.2021736
             val lon = 30.2964015
@@ -43,8 +42,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<WeatherForecast>, response: Response<WeatherForecast>) {
                     if (response.isSuccessful) {
                         val forecast = response.body()
-                        data = forecast?.list
-                        forecast?.apply { adapter.submitList(list) }
+                        WeatherStore.weathers = forecast?.list
+                        adapter.submitList(WeatherStore.weathers)
                         Timber.v("Response: ${forecast.toString()}")
                     }
                 }
@@ -53,18 +52,17 @@ class MainActivity : AppCompatActivity() {
             })
         }
         else {
-            data = savedInstanceState.getSerializable("data") as? List<WeatherEntry>
-            adapter.submitList(data)
-            Timber.v("Restored data: ${data.toString()}")
+            adapter.submitList(WeatherStore.weathers)
+            Timber.v("Restored data: ${WeatherStore.weathers.toString()}")
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        data?.let {
+        WeatherStore.weathers?.let {
             outState.putSerializable("data", ArrayList(it))
         }
-        Timber.v("savedInstanceState: ${data.toString()}")
+        Timber.v("savedInstanceState: ${WeatherStore.weathers.toString()}")
     }
 }
